@@ -1,0 +1,140 @@
+CONST
+entier nb_romains=7
+entier max_romain=16
+
+//Fonction
+//**
+//Description :
+//Demande à l'utilisateur quel type de conversion il souhaite faire ou si il souhaite arreté le programme.
+//Entrées :
+//Choix de l'utilisateur
+//Sorties :
+//Choix de l'utilisateur
+//**
+FONCTION getChoice() : Eniter //Pas un booleen car non disponible en c
+    VAR
+    nChoice : entier
+Debut
+    nChoice <- 0;
+    afficher("\n\n Quel type de conversion souhaitez-vous faire :\n 1 : Chiffres Arabe vers chiffres romain. \n 2 : Chiffres Romain vers chiffres arabes. \n 0: Arreter le programme \n");
+    Lire(nChoice);
+    getChoice<-nChoice;
+FINFONCTION
+
+//Procédure
+//**
+//Description :
+//Traduit un chiffre romain en chiffre arabe.
+//Entrées :
+//Chiffre Romain
+//Sorties :
+//Chiffre Arabe
+//**
+PROCEDURE RomanToArabic()
+    VAR
+    cSymbols : tableau[nb_romains] de car
+    nValues : tableau[nb_Romains] d'entier
+    nCounter : Entier
+    nCounterSymbol : entier
+    cRomain : tableau[max_romain] de car //Chiffre Romain entré par l'utilisateur(Taille de 16 car le plus grand chiffre possible est : MMMDCCCLXXXVIII)
+    nUnder : entier
+    nTotal : entier
+
+    Debut
+    cSymbols[nb_romains]<- "IVXLCDM";//Table de symboles romain
+    nValues[nb_romains]<- {1,5,10,50,100,500,1000};//Table de valeurs des symboles
+    nCounter<-0;//Position traité dans la chaine
+    nCounterSymbol<-0;//Compteur du symbole qui sert de comparaison
+    nUnder<-0; //Distance entre un chiffre romain et son chiffre soustractif dans la table de symbole (Ex : Le chiffre soustractif de X et V est I)
+    nTotal<-0; //Valeur à laquel on ajoute la valeur des chiffres romain traité
+    afficher("Veuillez entrer votre chiffre romain : \n");
+    lire(cRomain);
+    afficher("/n",cRomain,"" correspond a : "");
+    Pour nCounter allant de (LONGUEUR(cRomain)-1) à 0 //On effectue cette boucle jusqu'à avoir traité tout les caractère du nombre romain
+    DEBUT
+        nUnder<-((nCounterSymbol % 2=0)? 2 : 1); //On définie nUnder il vaut 2 pour les nombres au compteur pair(V,L,D) de la table et 1 pour les nombres au compteur impair(I,X,C,M) de la table
+        SI (cRomain[nCounter]=cSymbols[nCounterSymbol-nUnder]) ALORS//On vérifie si le symbole à la position nCounter correspond au symbole de soustraction du symbole précédent
+            nTotal<-nTotal-nValues[nCounterSymbol-nUnder]; //Si c'est le cas on soustrait ça valeur au total
+        FINSI
+        SINON 
+            TANT QUE(cRomain[nCounter]<>cSymbols[nCounterSymbol])//On incrémente le compteur des symboles jusqu'à arriver au symbole correspondant à la positon nCounter dans la chaine
+                        nCounterSymbol<-nCounterSymbol+1;
+        FINSINON
+
+        nTotal<-nTotal+nValues[nCounterSymbol];//Une fois le symbole trouvé on ajouter ça valeur au total
+        }
+    FINPOUR
+    affiche(nTotal); //On affiche le total
+FINPROCEDURE
+
+//Fonction
+//**
+//Description :
+//Transforme un chiffre arabe en chiffre romain.
+//Entrées :
+//Chiffre Arabe
+//Sorties :
+//Chiffre Romain
+//**
+PROCEDURE ArabicToRoman()
+    VAR
+    cSymbols : tableau[nb_romains] de car
+    nValues : tableau[nb_romains] d'entier
+    nCounter : entier
+    nNumber : entier
+    nUnder : entier
+
+DEBUT
+    cSymbols[nb_romains] <- "IVXLCDM"; //Table de symboles romain
+    nValues[nb_romains] <- {1,5,10,50,100,500,1000};//Table de valeurs des symboles
+    nCounter<-6; //Compteur du symbole romain en cours de traitement
+    nNumber<-0; //Nombre entrée par l'utilisateur
+    nUnder<-0;  //Distance entre un chiffre romain et son chiffre soustractif dans la table de symbole (Ex : Le chiffre soustractif de X et V est I)
+    afficher("Veuillez entrer votre nombre : \n");
+    lire(nNumber);
+    afficher("\n",nNumber," correspond a : ");
+    TANTQUE(nNumber>0) FAIRE //Boucle général on s'arrete quand le nombre est égal à 0
+        SI (nNumber>=nValues[nCounter]) ALORS //On vérifie si la valeur du symbole en cours traitement est plus petite que le nombre
+           afficher(cSymbols[nCounter]); //Si c'est le cas on l'affiche
+            nNumber<-nNumber-nValues[nCounter]; //Et on soustrait ça valeur au nombre entrée par l'utilisateur
+        FINSI
+        SINON
+                nUnder<-((nCounter%2=0)? 2 : 1); //On définie nUnder il vaut 2 pour les nombres au compteur pair(V,L,D) de la table et 1 pour les nombres au compteur impair(I,X,C,M) de la table
+                SI (nNumber>=(nValues[nCounter]-nValues[nCounter-nUnder])) ALORS //Sinon on vérifie si la valeur du symbole moins la valeur de son symbole de soustraction est plus petit que le nombre
+                    afficher(cSymbols[nCounter-nUnder],cSymbols[nCounter]); //Si c'est le cas on les affiche
+                    nNumber<-nNumber-nValues[nCounter]-nValues[nCounter-nUnder]; //On soustrait leurs valeurs au nombre entrée par l'utilisateur
+                FINSI
+                SINON 
+                nCounter<-nCounter-1;//Si ce n'est pas le cas on passe au symbole suivant
+                FINSINON
+
+        FINSINON
+    FINTANTQUE
+FINPROCEDURE
+
+VAR
+entier : nChoice
+
+//Principal
+//**
+//Description :
+//Traduit des chiffres romains en chiffres arabes ou des chiffres arabes en chiffres romain
+//Entrées :
+//Chiffre Arabe, Chiffre Romain, Choix
+//Sorties :
+//Chiffre Arabe Traduit, Chiffre Romain Traduit
+//**
+Debut
+    nChoice<-0;
+    REPETER
+    nChoice<-getChoice();   //On demande à l'utilisateur de choisir sa conversion et si il souhaite arreter le programme.
+    SI (nChoice=1) ALORS   //Si il entre 1 on fait une conversion de chiffres arabes vers chiffres romains
+        ArabicToRoman();
+    FINSI
+    SINON SI(nChoice=2) ALORS // Si il entre 2 on fait une conversion de chiffre romain vers chiffre arabe
+        RomanToArabic();
+    FINSI
+    FINSINON
+    JUSQU'A (nChoice<>0)//On effectue ces actions en boucle jusqu'à ce que l'utilisateur entre 0
+FIN
+
