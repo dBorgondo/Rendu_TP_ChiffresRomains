@@ -52,7 +52,7 @@ PROCEDURE RomanToArabic()
     afficher("/n",cRomain,"" correspond a : "");
     Pour nCounter allant de (LONGUEUR(cRomain)-1) à 0 //On effectue cette boucle jusqu'à avoir traité tout les caractère du nombre romain
     DEBUT
-        nUnder<-((nCounterSymbol % 2=0)? 2 : 1); //On définie nUnder il vaut 2 pour les nombres au compteur pair(V,L,D) de la table et 1 pour les nombres au compteur impair(I,X,C,M) de la table
+        nUnder<-((nCounterSymbol MOD 2=0)? 2 : 1); //On définie nUnder il vaut 2 pour les nombres au compteur pair(V,L,D) de la table et 1 pour les nombres au compteur impair(I,X,C,M) de la table
         SI (cRomain[nCounter]=cSymbols[nCounterSymbol-nUnder]) ALORS//On vérifie si le symbole à la position nCounter correspond au symbole de soustraction du symbole précédent
             nTotal<-nTotal-nValues[nCounterSymbol-nUnder]; //Si c'est le cas on soustrait ça valeur au total
         FINSI
@@ -99,7 +99,7 @@ DEBUT
             nNumber<-nNumber-nValues[nCounter]; //Et on soustrait ça valeur au nombre entrée par l'utilisateur
         FINSI
         SINON
-                nUnder<-((nCounter%2=0)? 2 : 1); //On définie nUnder il vaut 2 pour les nombres au compteur pair(V,L,D) de la table et 1 pour les nombres au compteur impair(I,X,C,M) de la table
+                nUnder<-((nCounter MOD 2=0)? 2 : 1); //On définie nUnder il vaut 2 pour les nombres au compteur pair(V,L,D) de la table et 1 pour les nombres au compteur impair(I,X,C,M) de la table
                 SI (nNumber>=(nValues[nCounter]-nValues[nCounter-nUnder])) ALORS //Sinon on vérifie si la valeur du symbole moins la valeur de son symbole de soustraction est plus petit que le nombre
                     afficher(cSymbols[nCounter-nUnder],cSymbols[nCounter]); //Si c'est le cas on les affiche
                     nNumber<-nNumber-nValues[nCounter]-nValues[nCounter-nUnder]; //On soustrait leurs valeurs au nombre entrée par l'utilisateur
